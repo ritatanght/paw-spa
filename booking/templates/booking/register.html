@@ -1,0 +1,40 @@
+{% extends 'booking/layout.html' %}
+
+{% block body %}
+<main class="container register main-pad">
+{%if message %}
+    <div class="message">{{message}}</div>
+{% endif %}
+
+<h2>Register</h2>
+    <form class="register-form" action="{% url 'register' %}" method="post">
+        {% csrf_token %}    
+        <label class="span2">Username
+        <input class="form__field" autofocus type="text" name="username"></label>
+        <label>First Name
+            <input class="form__field" type="text" name="first_name"></label>
+        <label>Last Name
+            <input class="form__field" type="text" name="last_name"></label>
+        <label>Email
+            <input class="form__field" type="email" name="email"> </label>
+        <label>Phone
+            <input class="form__field" type="phone" name="phone" placeholder="9051234567"> </label>
+        <label>Password
+            <input class="form__field" type="password" name="password"></label>
+        <label>Confirm Password
+            <input class="form__field" type="password" name="confirmation"></label>
+          {% comment %}
+        
+            <input class="form__field main-margin" autofocus type="text" name="username" placeholder="Username">     
+            <input class="form__field main-margin" type="text" name="first_name" placeholder="First Name">
+            <input class="form__field main-margin" type="text" name="last_name" placeholder="Last Name">
+            <input class="form__field main-margin" type="email" name="email" placeholder="Email Address">   
+            <input class="form__field main-margin" type="phone" name="phone" placeholder="Phone"> 
+            <input class="form__field main-margin" type="password" name="password" placeholder="Password">
+            <input class="form__field main-margin" type="password" name="confirmation" placeholder="Confirm Password">
+
+            {% endcomment %}
+        <input class="btn" type="submit" value="Register">
+    </form>
+</main>
+{% endblock %}

@@ -1,0 +1,91 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Itim&family=Kalam:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{% static 'booking/style.css' %}" />
+    <link rel="icon" type="image/x-icon" href="{% static 'booking/favicon.ico' %}"/>
+    <title>PAW SPA</title>
+  </head>
+  <body>
+    <header>
+      <nav class="flex nav container">
+        <a class="logo" href="{% url 'index' %}"
+          ><i class="fa-solid fa-paw"></i> Paw Spa</a
+        >
+        <ul class="nav-list flex">
+          <i class="fa-solid fa-xmark close-btn"></i>
+          <li class="list-item"><a href="{% url 'services' %}">Services</a></li>
+          
+          {% if user.is_authenticated %}
+          <li class="list-item"><a href="{% url 'booking' %}">Booking</a></li>
+          <li class="list-item">
+            <a class="username" href="{% url 'profile' %}"
+              >{{ user.username }}</a
+            >
+          </li>
+          <li class="list-item">
+            <a href="{% url 'logout' %}"
+              ><button class="btn btn-inverted">Sign Out</button></a
+            >
+          </li>
+          {% else %}
+          <li class="list-item"><a href="{% url 'register' %}">Register</a></li>
+          <li>
+            <a href="{% url 'login' %}"><button class="btn">Login</button></a>
+          </li>
+          {% endif %}
+        </ul>
+        <i class="fa-solid fa-bars menu-toggle"></i>
+      </nav>
+    </header>
+    {% block body %} {% endblock %}
+    <footer>
+      <div class="container flex">
+        <p>Copyright&copy; 2023 Paw Spa</p>
+        <ul class="social-links flex">
+          <li>
+            <a href="#"><i class="fa-brands fa-square-facebook"></i></a>
+          </li>
+          <li>
+            <a href="#"><i class="fa-brands fa-instagram"></i></a>
+          </li>
+          <li>
+            <a href="#"><i class="fa-brands fa-square-twitter"></i></a>
+          </li>
+        </ul>
+      </div>
+    </footer>
+    
+    <script>
+      // nav menu functionality
+      const menuBtn = document.querySelector(".menu-toggle");
+      const closeBtn = document.querySelector(".close-btn");
+      const navlist = document.querySelector(".nav-list");
+
+      menuBtn.addEventListener("click", () => {
+        console.log("open menu");
+        navlist.classList.toggle("show-sidebar");
+      });
+
+      closeBtn.addEventListener("click", () => {
+        navlist.classList.remove("show-sidebar");
+      });
+    </script>
+    {% block script %}
+    {% endblock %}
+  </body>
+</html>

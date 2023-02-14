@@ -1,0 +1,213 @@
+{% extends 'booking/layout.html' %}
+
+
+{% block body %}
+<main class="home">
+<section class="banner">
+    <div class="container">
+    <div class="banner__img">
+        <img src="https://cdn.pixabay.com/photo/2021/12/17/19/16/dog-6877283_1280.jpg" alt="dog">
+    </div>
+    
+    <div class="banner__content flex">
+        <h1>Professional Dog Grooming</h1>
+        <p>Call us at (905) 123-4567 or login to book your appointment now!</p>
+        <a href="{% url 'booking' %}"><button class="btn">Book an appointment</button></a>
+    </div>
+    </div>
+
+</section>
+    <section class="review-section container">
+        
+        <h2 class="center">What Our Customers Say About Us...</h2>
+        <div class="review__items">
+            
+                {% for comment in comments %}
+                <div class="review__item flex">
+                <p class="review__content">"{{comment.content}}"</p>
+                <p class="review__user">- {{comment.user.first_name}} {{comment.user.last_name}}</p>
+                </div>
+                {% endfor %}
+                
+              
+            
+            <div class="btn-group flex">
+            <i class="fa-solid fa-arrow-left review-prev"></i>
+            <i class="fa-solid fa-arrow-right review-next"></i>
+            </div>
+            
+        </div>
+        
+    </section>
+    {% if user.is_authenticated %}
+        <div class="comment-box center">
+            <label class="comment-toggle" for="comment">Leave Us a Comment <i class="fa-solid fa-pen"></i></label>
+            <div class="comment-form">
+                <textarea class="main-margin" name="comment" id="comment" placeholder="Your Comment Here..."></textarea>
+                <button class="btn comment-btn disabled" type="submit" disabled>Submit</button>
+            </div>
+        </div>
+        {% else %}
+        <hr class="container">
+        {% endif %}
+    <section class="info container flex">
+        
+        <div class="contact col">
+            <h2>Find Us</h2>
+            <p><i class="fa-solid fa-location-dot"></i> 123 Park, Toronto</p>
+            <p><i class="fa-solid fa-phone"></i> (905) 123-4567</p>
+        </div>
+        <table class="col center">
+            <thead>
+                <tr>
+                    <th colspan="2">Store Hours</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Sunday</td>
+                    <td>10:00am - 6:00pm</td>
+                </tr>      
+                <tr>
+                    <td>Monday</td>
+                    <td>Closed</td>
+                </tr>
+                <tr>
+                    <td>Tuesday</td>
+                    <td>10:00am - 6:00pm</td>
+                </tr>
+                <tr>
+                    <td>Wednesday</td>
+                    <td>10:00am - 6:00pm</td>
+                </tr>
+                <tr>
+                    <td>Thursday</td>
+                    <td>10:00am - 6:00pm</td>
+                </tr>
+                <tr>
+                    <td>Friday</td>
+                    <td>10:00am - 6:00pm</td>
+                </tr>
+                <tr>
+                    <td>Saturday</td>
+                    <td>10:00am - 6:00pm</td>
+                </tr>
+            </tbody>
+        </table>
+        
+    </section>
+  </main>
+{% endblock %}
+
+{% block script %}
+<script>
+       //review slider
+    const review = document.querySelectorAll('.review__item')
+    const prevBtn = document.querySelector('.review-prev')
+    const nextBtn = document.querySelector('.review-next')
+    let current = 0
+    
+    review[current].classList.add('current')
+    review[review.length -1].classList.add('prev')
+    nextBtn.addEventListener('click', nextReview)
+    prevBtn.addEventListener('click', prevReview)
+   
+    let intervalID = setInterval(nextReview,6000)
+
+    function nextReview(){
+        review[current -1 <0? review.length - 1: current - 1].classList.remove('prev')
+        review[current].classList.add('prev')
+        review[current].classList.remove('current')
+        // if the current review is larger than the amount of review, return to start of list
+        current ++;
+        if(current == review.length){
+            current = 0
+        }
+        review[current].classList.add('current')
+        // Once the button is clicked, reset the interval
+        resetInterval()
+    }
+
+    function prevReview(){
+        review[current - 1 < 0? review.length - 1: current - 1].classList.remove('prev')
+        review[current].classList.remove('current')
+        // if the current review is less than the amount of review, return to end of list
+        current --;
+        if(current < 0){
+            current = review.length -1
+        }
+        review[current- 1 < 0? review.length - 1: current - 1].classList.add('prev')
+        review[current].classList.add('current')
+        // Once the button is clicked, reset the interval
+        resetInterval()
+    }
+
+    function resetInterval(){
+        clearInterval(intervalID)
+        intervalID = setInterval(nextReview,6000)
+    }
+     
+
+    // comment form
+        const commentToggle = document.querySelector('.comment-toggle')
+        const comment_form = document.querySelector('.comment-form')
+        const commentBtn = document.querySelector('.comment-btn')
+        const comment = document.getElementById('comment')
+        
+
+        commentToggle && commentToggle.addEventListener('click',()=>{
+            // pet_form.style.display = 'block'
+            comment_form.classList.toggle('show-form')            
+        })
+        
+        // only able to submit comment when the textarea is not blank
+        comment && comment.addEventListener('keyup', ()=>{
+            console.log(comment.value.length)
+            if(comment.value.length > 0){
+                commentBtn.classList.remove('disabled')
+                commentBtn.disabled = false;
+            } else{
+                commentBtn.classList.add('disabled')
+                commentBtn.disabled = true;
+            }
+        })
+
+        commentBtn && commentBtn.addEventListener('click', ()=>{
+        const username = document.querySelector('.username').textContent
+
+            if(comment.value.length > 0){
+            let csrftoken = getCookie('csrftoken');
+                fetch("", {
+                    method: "POST",
+                    body: JSON.stringify({
+                        username:username,
+                        comment: comment.value,
+                    }),
+                    headers: { "X-CSRFToken": csrftoken },
+                    })
+                    .then((response) => response.json())
+                    .then((result)=>{
+                        comment_form.parentElement.innerHTML = `<p>${result.message}<p>`
+                    })
+           }         
+        })
+
+    function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        let cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            let cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+ 
+    </script>
+    {% endblock %}

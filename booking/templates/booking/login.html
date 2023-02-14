@@ -1,0 +1,19 @@
+{% extends 'booking/layout.html' %}
+
+{% block body %}
+
+<main class="container login main-pad">
+    {%if message %}
+        <div class="message">{{message}}</div>
+    {% endif %}
+    <h1>Login</h1>
+    <form class="login-form" action="{% url 'login' %}" method="post">
+        {% csrf_token %}
+        <input autofocus class="form__field main-margin" type="text" name="username" placeholder="Username">
+        <input class="form__field main-margin" type="password" name="password" placeholder="Password">
+        <input class="btn" type="submit" value="Login">
+    </form>
+
+    Don't have an account yet? <a href="{% url 'register' %}">Register here.</a>
+</main>
+{% endblock %}
