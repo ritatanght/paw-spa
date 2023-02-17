@@ -18,6 +18,10 @@
     />
     <link rel="stylesheet" href="{% static 'booking/style.css' %}" />
     <link rel="icon" type="image/x-icon" href="{% static 'booking/favicon.ico' %}"/>
+    <script type="module" src="{% static 'booking/script.js' %}" defer></script>
+    {% block script %}
+      
+    {% endblock %}
     <title>PAW SPA</title>
   </head>
   <body>
@@ -70,22 +74,5 @@
       </div>
     </footer>
     
-    <script>
-      // nav menu functionality
-      const menuBtn = document.querySelector(".menu-toggle");
-      const closeBtn = document.querySelector(".close-btn");
-      const navlist = document.querySelector(".nav-list");
-
-      menuBtn.addEventListener("click", () => {
-        console.log("open menu");
-        navlist.classList.toggle("show-sidebar");
-      });
-
-      closeBtn.addEventListener("click", () => {
-        navlist.classList.remove("show-sidebar");
-      });
-    </script>
-    {% block script %}
-    {% endblock %}
   </body>
 </html>

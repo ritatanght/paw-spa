@@ -6,7 +6,7 @@
     <div class="message">{{message}}</div>
 {% endif %}
 
-<h2>Register</h2>
+    <h2>Register</h2>
     <form class="register-form" action="{% url 'register' %}" method="post">
         {% csrf_token %}    
         <label class="span2">Username
@@ -18,7 +18,7 @@
         <label>Email
             <input class="form__field" type="email" name="email"> </label>
         <label>Phone
-            <input class="form__field" type="phone" name="phone" placeholder="9051234567"> </label>
+            <input class="form__field" type="phone" name="phone" placeholder="9051234567"></label>
         <label>Password
             <input class="form__field" type="password" name="password"></label>
         <label>Confirm Password

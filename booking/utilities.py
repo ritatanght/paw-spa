@@ -1,4 +1,5 @@
-from datetime import datetime
+from datetime import datetime, timedelta
+from .models import Appointment
 
 def list_diff(l1: list, l2: list):
     """ Return a list of elements that are present in l1
@@ -28,3 +29,23 @@ class DateConverter:
 
     def to_url(self, value):
         return value.strftime(self.format)
+
+
+def load_preview_dict(start):
+    today = datetime.today().date()
+    date_list = [start + timedelta(days=x) for x in range(7)]
+
+    slot_dict = {}
+    for date in date_list:
+        if date.weekday() == 0:
+            slot_dict[datetime.strftime(date, '%Y-%m-%d-%a')] = 'Closed'
+        else:
+            time_list = [10, 13, 15]
+            time_slot_list = list(Appointment.objects.filter(
+                date=date).values_list('time', flat=True))
+
+            for i in range(len(time_list)):
+                if time_list[i] in time_slot_list or (date == today and datetime.now().hour > time_list[i]):
+                    time_list[i] = 'x'
+            slot_dict[datetime.strftime(date, '%Y-%m-%d-%a')] = time_list
+    return slot_dict

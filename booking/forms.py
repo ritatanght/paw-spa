@@ -4,14 +4,12 @@ from datetime import datetime, timedelta
 from .utilities import check_free_time
 
 
-
-
 class PetForm (forms.ModelForm):
     class Meta:
         model = Pet
         fields = ('name','size','date_of_birth','breed')
         widgets = {
-            'date_of_birth': forms.DateInput(format=('%Y/%m/%d'), attrs={'placeholder': 'Select a date', 'type': 'date'}),
+            'date_of_birth': forms.DateInput(format=('%Y/%m/%d'), attrs={'type': 'date'}),
         }
 
     def clean(self):
@@ -37,6 +35,7 @@ class AppointmentForm (forms.ModelForm):
         date = self.cleaned_data["date"]
         time = self.cleaned_data["time"]
         today = datetime.today().date()
+
         if date < today or (date == today and time < datetime.now().hour):
             raise  forms.ValidationError("The date or time cannot be in the past")
 
@@ -44,7 +43,7 @@ class AppointmentForm (forms.ModelForm):
             raise  forms.ValidationError("Sorry, we are closed on Monday")
         
         elif (date - today).days/7 >= 5:
-            raise  forms.ValidationError("Appointment booking is only available for dates within 5 weeks")
+            raise  forms.ValidationError("Appointment booking is only available for dates within 5 weeks.")
         
         elif Appointment.objects.filter(date= date, time=time).exists():
             time_slot_list = list(Appointment.objects.filter(
@@ -58,13 +57,12 @@ class AppointmentForm (forms.ModelForm):
 
             available_slot = check_free_time(all_time_slot, time_slot_list)
             if available_slot:
-                message = f"Requested slot is already booked, the following time slot is still available: {', '.join(str(f'{hr}:00') for hr in available_slot)}."
-                raise forms.ValidationError(message)
+                raise forms.ValidationError(
+                    f"Requested slot is already booked, the following time slot is still available: {', '.join(str(f'{hr}:00') for hr in available_slot)}.")
             else:
-                message = "There are no available slots for the selected date."
-                raise forms.ValidationError(message)
+                raise forms.ValidationError(
+                    "There are no available slots for the selected date.")
         return self.cleaned_data
-
 
 
     def __init__(self, *args, **kwargs):
