@@ -49,7 +49,6 @@ function confirmDel(pet) {
   });
 }
 
-
 // Edit phone and email
 const editBtn = document.querySelectorAll(".edit-btn");
 
@@ -65,9 +64,9 @@ function updateField(edit_btn) {
 
   if (field.id === "phone") {
     field_value = field_value.replace(/\s|\(|\)|\-/g, ""); // remove the meta characters in the field
-    field.innerHTML = `<input type='tel' name='phone' pattern='[0-9]{10}' value='${field_value}'> <button class="btn save-btn">Save</button>`;
+    field.innerHTML = `<input type='tel' name='phone' pattern='[0-9]{10}' value='${field_value}' autofocus> <button class="btn save-btn">Save</button>`;
   } else {
-    field.innerHTML = `<input type='email' name='email' value='${field_value}'>  <button class="btn save-btn">Save</button>`;
+    field.innerHTML = `<input type='email' name='email' value='${field_value}' autofocus>  <button class="btn save-btn">Save</button>`;
   }
   field
     .querySelector(".save-btn")
@@ -136,7 +135,7 @@ details.forEach((btn) => {
           ).innerHTML = `<h4 class='center'>${result.error}</h4>`;
         } else {
           const { id, dog, date, time, service, add_ons, created } = result;
-          
+
           if (add_ons === "None") {
             document.getElementById(
               "add-ons"
@@ -240,7 +239,6 @@ function editBooking(fields_value) {
     );
 }
 
-
 // update appointment details in database when revise form submitted
 function updateAppointment(e, id) {
   e.preventDefault();
@@ -286,8 +284,8 @@ function updateAppointment(e, id) {
 function cancelBooking(id) {
   modalDisplay("msgDiv");
   const msgDiv = document.querySelector(".modal__msg");
-    msgDiv.innerHTML =
-      '<p>Are you sure?<p><div class="btn-group flex"><button class="btn btn-inverted" id="confirm">confirm</button><button class="btn" id="no">No</button></div>';
+  msgDiv.innerHTML =
+    '<p>Are you sure?<p><div class="btn-group flex"><button class="btn btn-inverted" id="confirm">confirm</button><button class="btn" id="no">No</button></div>';
   document
     .getElementById("no")
     .addEventListener("click", () => modalDisplay("text"));

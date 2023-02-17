@@ -2,12 +2,17 @@
 
 This web application is created as the capstone project for CS50W. It is a booking application for dog owners to book pet grooming services for their dogs. I got the inspiration for the project due to my experience of having to call the store to book such an appointment every time. Although I am aware that this is not a brand-new idea, I believe, in this technologically advanced era, customers should be provided with an online system where they can easily book an appointment and choose the services they want.
 
+## Table of contents
+
 - [Distinctiveness and Complexity](#distinctiveness-and-complexity)
 - [Specifications and What to Expect](#specifications-and-what-to-expect)
   - [/templates folder](#templates-folder)
   - [/static folder](#static-folder)
+  - [models.py](#modelspy)
   - [forms.py](#formspy)
 - [How to run the application](#how-to-run-the-application)
+- [Screencast](#screencast)
+
 
 ## Distinctiveness and Complexity
 
@@ -15,7 +20,7 @@ This web application is created as the capstone project for CS50W. It is a booki
 - Some checking logic has been added to modelForm in forms.py to ensure the validity of the data input, a validation error will be raised in case of any validation failure.
 - Since this is a booking web application, there are many instances where comparisons and calculations of date and time are necessary, and to make this possible between two programming languages, either their format has to be consistent, or converting from a date string into a date object, or vice versa, is required.
 - A dynamic preview schedule of time slots for the five weeks ahead starting from today is available for customers to get a grasp of the currently available time slots for booking. Furthermore, when each of the available time slots is clicked, the date and time field of the appointment booking form located on the same page should be populated accordingly. To accomplish these results, coordination between HTML, Javascript and Django is crucial.
-- Many of the editing can be done on the profile page without reloading the page. The editing and cancelling of an appointment are done within a modal on the profile page. It is more complex to populate the modelForm with data from Django through Javascript than to render a pre-filled form through a Django template while the form input fields are not purely in text type.
+- Many of the updates to the database can be done on the profile page, including personal information, pets and booked appointments. In particular, the editing and cancelling of an appointment are done within a modal on the profile page. It is more complex to populate the modelForm with data from Django through Javascript than to render a pre-filled form through a Django template while the form input fields are not purely in text type.
 
 ## Specifications and What to Expect
 
@@ -80,3 +85,5 @@ There are the two most important model form of the application which are based o
 7. Staff can then check through the Django admin for who has made appointments and for what time slot.
 
 
+## Screencast
+Click [here](https://youtu.be/FFTdGN_0Rtk) to watch it in action

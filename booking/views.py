@@ -58,7 +58,7 @@ def login_view(request):
                 return HttpResponseRedirect(reverse('profile'))
             else:
                 return HttpResponseRedirect(next)
-                  
+
         else:
             return render(request, "booking/login.html", {
                 'next': next,
@@ -107,7 +107,7 @@ def register(request):
                 "message": "Username already taken."
             })
         login(request, user)
-        return HttpResponseRedirect(reverse("index"))
+        return HttpResponseRedirect(reverse("profile"))
     else:
         return render(request, 'booking/register.html')
 
@@ -134,7 +134,7 @@ def profile(request):
             return HttpResponseRedirect(reverse("profile"))
         else:
             return render(request, "booking/profile.html", {
-                "form": form,
+                "petform": form,
                 "owner": owner,
                 "pets": pets,
                 "booking": booking,
@@ -157,6 +157,7 @@ def profile(request):
             if len(value) == 10 and value.isnumeric():
                 owner.phone = value
                 owner.save()
+                return HttpResponse(status=204)
             else:
                 return JsonResponse({"message": "Phone number should have 10 digits and numbers only."}, status=400)
         elif field == 'email':
@@ -222,7 +223,7 @@ def booking(request):
                     service = bookform.cleaned_data["service"]
                     add_ons = bookform.cleaned_data["add_ons"]
                     Appointment.objects.create(
-                        user=owner, dog=dog, date=date, time=time, service=service, add_ons=add_ons, booked=True)
+                        user=owner, dog=dog, date=date, time=time, service=service, add_ons=add_ons)
                     return HttpResponseRedirect(reverse('profile'))
 
             else:  # booking form invalid
