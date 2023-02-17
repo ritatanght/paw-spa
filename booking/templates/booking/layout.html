@@ -17,11 +17,13 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="{% static 'booking/style.css' %}" />
-    <link rel="icon" type="image/x-icon" href="{% static 'booking/favicon.ico' %}"/>
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="{% static 'booking/favicon.ico' %}"
+    />
     <script type="module" src="{% static 'booking/script.js' %}" defer></script>
-    {% block script %}
-      
-    {% endblock %}
+    {% block script %} {% endblock %}
     <title>PAW SPA</title>
   </head>
   <body>
@@ -33,7 +35,7 @@
         <ul class="nav-list flex">
           <i class="fa-solid fa-xmark close-btn"></i>
           <li class="list-item"><a href="{% url 'services' %}">Services</a></li>
-          
+
           {% if user.is_authenticated %}
           <li class="list-item"><a href="{% url 'booking' %}">Booking</a></li>
           <li class="list-item">
@@ -59,7 +61,7 @@
     {% block body %} {% endblock %}
     <footer>
       <div class="container flex">
-        <p>Copyright&copy; 2023 Paw Spa</p>
+        <p>Copyright&copy; {% now "Y" %} Paw Spa</p>
         <ul class="social-links flex">
           <li>
             <a href="#"><i class="fa-brands fa-square-facebook"></i></a>
@@ -73,6 +75,5 @@
         </ul>
       </div>
     </footer>
-    
   </body>
 </html>
