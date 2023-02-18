@@ -19,7 +19,7 @@ del_btn &&
 function confirmDel(pet) {
   const petItem = pet.innerHTML;
   pet.innerHTML =
-    '<small>All the related records for this pet will be deleted.</small><p>Are you sure?<p><div class="btn-group flex"><button class="btn btn-inverted" id="yes">Yes</button><button class="btn " id="no">No</button></div>';
+    '<small>All the related records for this pet will be deleted.</small><p>Are you sure?<p><div class="btn-group flex"><button class="btn btn-inverted" id="yes">Yes</button><button class="btn" id="no">No</button></div>';
   document.getElementById("yes").addEventListener("click", () => {
     const username = document.querySelector(".username").textContent;
 

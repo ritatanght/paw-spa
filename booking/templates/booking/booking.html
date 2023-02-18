@@ -17,8 +17,10 @@
         <hr>
     </form>
 
-    {% if message %}
-    <div class="message main-margin">{{message}}</div>
+    {% if messages %}
+        {% for message in messages %}
+        <div class="message main-margin">{{message}}</div>
+        {% endfor %}
     {% endif %}
 
     <section class="preview main-margin">

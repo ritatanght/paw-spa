@@ -61,9 +61,9 @@ def login_view(request):
                 return HttpResponseRedirect(next)
 
         else:
+            messages.error(request, "Invalid username and/or password.")
             return render(request, "booking/login.html", {
                 'next': next,
-                "message": "Invalid username and/or password."
             })
     else:
         return render(request, 'booking/login.html')
@@ -85,28 +85,26 @@ def register(request):
         password = request.POST["password"]
         confirmation = request.POST["confirmation"]
         if password != confirmation:
-            return render(request, "booking/register.html", {
-                "message": "Passwords do not match."
-            })
-
-        if first_name == "" and last_name == "":
-            return render(request, "booking/register.html", {
-                "message": "Please fill in your name."
-            })
+            messages.error(request, "Passwords do not match.")
+            return HttpResponseRedirect(reverse("register"))
+            
+        elif first_name == "" or last_name == "":
+            messages.error(request, "Please fill in your name.")
+            return HttpResponseRedirect(reverse("register"))
         
-        if password == "":
-            return render(request, "booking/register.html", {
-                "message": "Please input a password."
-            })
+        elif password == "":
+            messages.error(request, "Please input a password.")
+            return HttpResponseRedirect(reverse("register"))
+
         elif len(password) < 6:
-            return render(request, "booking/register.html", {
-                "message": "Password must contain at least 6 characters."
-            })
+            messages.error(
+                request, "Password must contain at least 6 characters.")
+            return HttpResponseRedirect(reverse("register"))
 
         if phone and (len(phone) != 10 or not phone.isnumeric()):
-            return render(request, "booking/register.html", {
-                "message": "Phone number invalid. Must be 10 digits and in format: 9051234567"
-            })
+            messages.error(
+                request, "Phone number invalid. Must be 10 digits and in format: 9051234567")
+            return HttpResponseRedirect(reverse("register"))
 
         # Attempt to create new user
         try:
@@ -118,9 +116,9 @@ def register(request):
             Owner.objects.create(user=user, phone=phone)
 
         except IntegrityError:
-            return render(request, "booking/register.html", {
-                "message": "Username already taken."
-            })
+            messages.error(
+                request, "Username already taken.")
+            return HttpResponseRedirect(reverse("register"))
         login(request, user)
         return HttpResponseRedirect(reverse("profile"))
     else:
@@ -208,9 +206,19 @@ def change_password(request):
         confirmation = request.POST["confirmation"]
         user_record = User.objects.get(username=request.user)
         if len(new_password) < 6:
-            return render(request, "booking/changepassword.html", {
-                "message": "Password must contain at least 6 characters."
-            })
+            messages.error(
+                request, 'Password must contain at least 6 characters.')
+            return HttpResponseRedirect(reverse('changepassword'))
+        elif new_password != confirmation:
+            messages.error(
+                request, 'New password and confirmation do not match.')
+            return HttpResponseRedirect(reverse('changepassword'))
+
+        elif old_password == new_password:
+            messages.error(
+                request, 'Old and new passwords cannot be the same.')
+            return HttpResponseRedirect(reverse('changepassword'))
+
         if old_password and new_password and (new_password == confirmation) and (old_password != new_password):
             if user_record.check_password(old_password):
                 user_record.set_password(new_password)
@@ -218,26 +226,9 @@ def change_password(request):
                 messages.success(request, 'Password has been updated, please login with your new password.')
                 return HttpResponseRedirect(reverse('login'))
             else:
-                return render(request, "booking/changepassword.html", {
-                    "message": "Old password is incorrent."
-                })
-            
-        elif new_password != confirmation:
-            return render(request, "booking/changepassword.html", {
-                "message": "New password and confirmation do not match."
-            })
-
-        elif old_password == new_password:
-            return render(request, "booking/changepassword.html", {
-                "message": "Old and new passwords cannot be the same."
-            })
-
-        elif len(new_password) < 6:
-            return render(request, "booking/changepassword.html", {
-                "message": "Password must contain at least 6 characters."
-            })
-        
-
+                messages.error(
+                    request, 'Old password is incorrect.')
+                return HttpResponseRedirect(reverse('changepassword'))
 
     else:
         return render(request, 'booking/changepassword.html')
@@ -309,12 +300,11 @@ def booking(request):
                 breed = petform.cleaned_data["breed"].title()
                 Pet.objects.create(owner=owner, name=name, size=size,
                                    date_of_birth=date_of_birth, breed=breed)
-                message = f"{name} is added successfully"
+                messages.success(request, f"{name} is added successfully")
                 return render(request, 'booking/booking.html', {
                     "form": bookform,
                     "petform": PetForm(),
                     "date_list": slot_dict,
-                    "message": message
                 })
             # pet form invalid
             else:
