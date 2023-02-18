@@ -13,8 +13,11 @@ class PetForm (forms.ModelForm):
         }
 
     def clean(self):
-        if self.cleaned_data["date_of_birth"] > datetime.today().date():
+        if self.cleaned_data["date_of_birth"] is None:
+            raise forms.ValidationError("Please input a date")
+        elif self.cleaned_data["date_of_birth"] > datetime.today().date():
             raise forms.ValidationError("The date cannot be in the future")
+       
         return self.cleaned_data
 
 TIME_CHOICES = [
@@ -35,6 +38,7 @@ class AppointmentForm (forms.ModelForm):
         date = self.cleaned_data["date"]
         time = self.cleaned_data["time"]
         today = datetime.today().date()
+        
 
         if date < today or (date == today and time < datetime.now().hour):
             raise  forms.ValidationError("The date or time cannot be in the past")

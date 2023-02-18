@@ -1,6 +1,7 @@
 import json
 from django.shortcuts import render
 from django.urls import reverse
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
@@ -50,7 +51,7 @@ def login_view(request):
         username = request.POST["username"]
         password = request.POST["password"]
         user = authenticate(request, username=username, password=password)
-
+        
         # Check if authentication successful
         if user is not None:
             login(request, user)
@@ -86,6 +87,20 @@ def register(request):
         if password != confirmation:
             return render(request, "booking/register.html", {
                 "message": "Passwords do not match."
+            })
+
+        if first_name == "" and last_name == "":
+            return render(request, "booking/register.html", {
+                "message": "Please fill in your name."
+            })
+        
+        if password == "":
+            return render(request, "booking/register.html", {
+                "message": "Please input a password."
+            })
+        elif len(password) < 6:
+            return render(request, "booking/register.html", {
+                "message": "Password must contain at least 6 characters."
             })
 
         if phone and (len(phone) != 10 or not phone.isnumeric()):
@@ -170,14 +185,63 @@ def profile(request):
                 return JsonResponse({"message": "Please input an valid email"}, status=400)
 
     else:
+
+        bookform = AppointmentForm()
+        bookform.fields["dog"].queryset = Pet.objects.filter(owner=owner)
+
         return render(request, "booking/profile.html", {
             "petform": PetForm(),
             "owner": owner,
             "pets": pets,
             "booking": booking,
             "today": today,
-            "bookform": AppointmentForm(),
+            "bookform": bookform,
         })
+
+
+@login_required(login_url='/login')
+def change_password(request):
+
+    if request.method == "POST":
+        old_password = request.POST["old_password"]
+        new_password = request.POST["new_password"]
+        confirmation = request.POST["confirmation"]
+        user_record = User.objects.get(username=request.user)
+        if len(new_password) < 6:
+            return render(request, "booking/changepassword.html", {
+                "message": "Password must contain at least 6 characters."
+            })
+        if old_password and new_password and (new_password == confirmation) and (old_password != new_password):
+            if user_record.check_password(old_password):
+                user_record.set_password(new_password)
+                user_record.save()
+                messages.success(request, 'Password has been updated, please login with your new password.')
+                return HttpResponseRedirect(reverse('login'))
+            else:
+                return render(request, "booking/changepassword.html", {
+                    "message": "Old password is incorrent."
+                })
+            
+        elif new_password != confirmation:
+            return render(request, "booking/changepassword.html", {
+                "message": "New password and confirmation do not match."
+            })
+
+        elif old_password == new_password:
+            return render(request, "booking/changepassword.html", {
+                "message": "Old and new passwords cannot be the same."
+            })
+
+        elif len(new_password) < 6:
+            return render(request, "booking/changepassword.html", {
+                "message": "Password must contain at least 6 characters."
+            })
+        
+
+
+    else:
+        return render(request, 'booking/changepassword.html')
+
 
 
 @login_required(login_url='/login')
@@ -227,6 +291,8 @@ def booking(request):
                     return HttpResponseRedirect(reverse('profile'))
 
             else:  # booking form invalid
+                bookform.fields["dog"].queryset = Pet.objects.filter(
+                    owner=owner)
                 return render(request, 'booking/booking.html', {
                     "form": bookform,
                     "petform": PetForm(),

@@ -3,19 +3,17 @@
 {% block body %}
 
 <main class="container login main-pad">
+    {% if messages %}
+        {% for message in messages %}
+        <div class="message">{{message}}</div>
+        {% endfor %}
+    {% endif %}
     {%if message %}
         <div class="message">{{message}}</div>
-        <form class="login-form" action="{% url 'login' %}" method="post">
     {% endif %}
     <h1>Login</h1>
-    {% if next %}
-    <form class="login-form" action="" method="post" >
-    {%else%}
-    <form class="login-form" action="" method="post">
-    {% endif %}
-    
-        {% csrf_token %}
-        
+    <form class="login-form" action="" method="post">   
+        {% csrf_token %}     
         <input autofocus class="form__field main-margin" type="text" name="username" placeholder="Username">
         <input class="form__field main-margin" type="password" name="password" placeholder="Password">
         <input type="hidden" name="next" value="{{request.GET.next}}"/>

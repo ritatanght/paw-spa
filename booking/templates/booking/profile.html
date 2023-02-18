@@ -4,12 +4,13 @@
 {% block body %}
 
 <main class="container profile main-pad">
-    
+  
     <h1>Profile</h1>
-    <div class="personal-info">
+    <div class="personal-info"> 
     <p><strong>Name:</strong> {{user.first_name}} {{user.last_name}}</p>
-    <p><strong>Phone:</strong> <span id="phone">{%if owner.phone%}({{owner.phone|slice:"0:3"}}) {{owner.phone|slice:"3:6"}}-{{owner.phone|slice:"6:"}}{%endif%}</span> <button class="btn edit-btn edit-phone">Edit</button></p>
+    <p><strong>Phone:</strong> <span id="phone">{%if owner.phone %}({{owner.phone|slice:"0:3"}}) {{owner.phone|slice:"3:6"}}-{{owner.phone|slice:"6:"}}{%endif%}</span> <button class="btn edit-btn edit-phone">Edit</button></p>
     <p><strong>Email:</strong> <span id="email">{{user.email}}</span> <button class="btn edit-btn edit-email">Edit</button></p>
+    <a href="{% url 'changepassword' %}"><button class="btn main-margin change-pw">Change Password</button></a>
     </div>
     
     <section class="pet main-margin">

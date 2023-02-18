@@ -28,7 +28,6 @@ class Pet(models.Model):
         return self.name
  
 
-
 class Appointment(models.Model):
     SERVICE_CHOICES = [
         ("E", "Express Grooming"),
@@ -61,6 +60,7 @@ class Appointment(models.Model):
     service = models.CharField(max_length=20, choices=SERVICE_CHOICES, default="E")
     add_ons = MultiSelectField(
         choices=ADDONS_CHOICES, max_choices=6, max_length=11, default=0)
+    remarks = models.CharField(max_length=200, null = True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
 
     class Meta:

@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 from .models import Appointment
 
+# used to check free time slot when booking form is submitted
 def list_diff(l1: list, l2: list):
     """ Return a list of elements that are present in l1
         or in l2 but not in both l1 & l2.
@@ -19,7 +20,7 @@ def check_free_time(time_slot: list, exist_list: list):
     remain_slot = list_diff(time_slot, exist_list)
     return remain_slot
 
-
+# convert date in urls
 class DateConverter:
     regex = '\d{4}-\d{1,2}-\d{1,2}'
     format = '%Y-%m-%d'
@@ -31,6 +32,7 @@ class DateConverter:
         return value.strftime(self.format)
 
 
+# load the schedule dict to be sent to javascript for showing the preview schedule
 def load_preview_dict(start):
     today = datetime.today().date()
     date_list = [start + timedelta(days=x) for x in range(7)]
