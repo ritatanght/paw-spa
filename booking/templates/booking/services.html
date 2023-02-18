@@ -1,0 +1,78 @@
+{% extends 'booking/layout.html' %} 
+
+{% block body %}
+<main class="services main-margin">
+  <section class="container main-pad">
+    
+    <h2 class="center">Dog Grooming Services</h2>
+    <div class="services__items flex">
+    <div class="services_item center">
+      <h3>Express Grooming</h3>
+      <p>from <span class="services_price">$60</span></p>
+      <p class="services__dog-type">Small Dogs $60 - $85</p>
+      <p class="services__dog-type">Medium Dogs $85 - $100</p>
+      <p class="services__dog-type">Large Dogs $100 - $125</p>
+      <ul class="services__item-list">
+        <li>Wash</li>
+        <li>Blow Dry</li>
+        <li>Brush & Comb Out</li>
+        <li>Ears Cleaned</li>
+      </ul>
+    <a href="{% url 'booking' %}"><button class="btn service__btn sm-screen">Book Now</button></a>
+    </div>
+        <div class="services_item center">
+      <h3>Full Dog Grooming</h3>
+      <p>from <span class="services_price">$90</span></p>
+      <p class="services__dog-type">Small Dogs $90 - $100</p>
+      <p class="services__dog-type">Medium Dogs $110 - $140</p>
+      <p class="services__dog-type">Large Dogs $160 - $200</p>
+      <ul class="services__item-list">
+        <li>Wash</li>
+        <li>Breed-specific Trim & Scissor Styling</li>
+        <li>Nail Trim & Grinding</li>
+        <li>Brush & Comb Out</li>
+        <li>Ears Cleaned</li>
+        <li>Sanitary Trim</li>
+        <li>Pads Shave Out</li>
+      </ul>
+    <a href="{% url 'booking' %}"><button class="btn service__btn sm-screen">Book Now</button></a>
+    </div>
+        <div class="services_item center">
+      <h3>Spa Premium Grooming</h3>
+      <p>from <span class="services_price">$100</span></p>
+      <p class="services__dog-type">Small Dogs $100 - $120</p>
+      <p class="services__dog-type">Medium Dogs $125 - $160</p>
+      <p class="services__dog-type">Large Dogs $170 - $230</p>
+      <ul class="services__item-list">
+        <li>Deshedding Treatment</li>
+        <li>Skin Treatment</li>
+        <li>Color Treatment</li>
+        <li>Wash</li>
+        <li>Brush & Comb Out</li>
+        <li>Breed-specific Trim & Scissor Styling</li>
+        <li>Nail Trim & Grinding</li>
+        <li>Ears Cleaned</li>
+        <li>Sanitary Trim</li>
+        <li>Pads Shave Out</li>
+      </ul>
+       <a href="{% url 'booking' %}"><button class="btn service__btn sm-screen">Book Now</button></a>
+    </div>
+    
+    </div>
+    <a href="{% url 'booking' %}"><button class="btn service__btn lg-screen">Book Now</button></a>
+</section>
+<hr class="container">
+<section class="container main-pad">
+    <h2>Add-on Services</h2>
+    <ul class="flex add-on">
+        <li>Tooth Brushing</li>
+        <li>De-matting</li>
+        <li>Blueberry Facial</li>
+        <li>Body massage</li>
+        <li>Hydro massage bath</li>
+        <li>Oatmeal or Aloe Conditioning</li>
+    </ul>
+</section>
+</main>
+
+{% endblock %}

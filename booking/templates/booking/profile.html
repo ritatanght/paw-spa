@@ -1,0 +1,90 @@
+{% extends 'booking/layout.html' %}
+{% load static %}
+
+{% block body %}
+
+<main class="container profile main-pad">
+  
+    <h1>Profile</h1>
+    <div class="personal-info"> 
+    <p><strong>Name:</strong> {{user.first_name}} {{user.last_name}}</p>
+    <p><strong>Phone:</strong> <span id="phone">{%if owner.phone %}({{owner.phone|slice:"0:3"}}) {{owner.phone|slice:"3:6"}}-{{owner.phone|slice:"6:"}}{%endif%}</span> <button class="btn edit-btn edit-phone">Edit</button></p>
+    <p><strong>Email:</strong> <span id="email">{{user.email}}</span> <button class="btn edit-btn edit-email">Edit</button></p>
+    <a href="{% url 'changepassword' %}"><button class="btn main-margin change-pw">Change Password</button></a>
+    </div>
+    
+    <section class="pet main-margin">
+    <h2>Pets</h2>
+    {% if pets %}
+    <div class="pet__list">
+        {%for pet in pets%}
+        <div class="pet__item flex center" id="{{pet.id}}">
+            <p><strong>{{pet.name}}</strong></p>
+            <p>Age: {{pet.date_of_birth|timesince:today}}</p>            
+            <i class="fa-solid fa-xmark del-btn"></i>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+        <p>You have not added any pet to your profile.</p>
+        <p>Add your pet now to facilitate the booking process.</p>
+    {% endif %}
+    <button class="add-pet">Add a Pet</button>
+    {% if petform.errors %}
+    <form class="pet-form show-form" action="{% url 'profile' %}" method="post">
+    {% else %}
+    <form class="pet-form" action="{% url 'profile' %}" method="post">
+    {% endif %}
+        {%csrf_token%}
+        {{petform}}
+        <input class="btn" type="submit" value="Add Pet"/>
+        <hr>
+    </form>
+    
+    </section>
+    <section class="booking main-margin">
+        <h2>Appointments</h2>
+        {% if booking %}
+        <div class="booking__items">
+            {% for appointment in booking %}
+            <div class="booking__item flex">
+                <h3>Ref# {{appointment.id|stringformat:"05d"}}</h3>
+                <p>{{appointment.date|date:"M d, Y (D)"}} at {{appointment.get_time_display}}</p>
+                <p class="details-btn" id="{{appointment.id}}">Details</p>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p>You have no booked appointments at the moment.</p>
+        {% endif %}
+    </section>
+
+    <div class="modal">    
+        <div class="modal__content">
+            <i class="fa-regular fa-circle-xmark modal__close-btn"></i>
+            <form class="booking-form modal__form">
+                    {{bookform}}
+                    <input class="btn" name="book" type="submit" value="Submit">
+            </form>
+            <div class="modal__text flex">
+                <h3>Booking Ref# <span id="ref"></span></h3>
+                <hr class="modal__divider">
+                <p><i class="fa-solid fa-dog"></i> <span id="dog"></span></p>
+                <p><i class="fa-regular fa-calendar-days"></i> <span id="datetime"></span></p>
+                <p><i class="fa-solid fa-bath"></i> <span id="service"></span></p>
+                <div><u>Add-on Services:</u><ul id="add-ons"></ul></div>
+                <p class="book-time">Booked on <span id="created"></span></p>
+                <div class="btn-group flex">
+                    <p class="booking__btn-edit" href="#"><i class="fa-regular fa-pen-to-square"></i> Edit</p>
+                    <p class="booking__btn-cancel"><i class="fa-solid fa-ban"></i> Cancel Booking</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+{% endblock %}
+
+{%  block script %}
+   <script type="module" src="{% static 'booking/profile.js' %}" defer></script>
+{% endblock %}

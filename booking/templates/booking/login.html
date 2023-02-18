@@ -1,0 +1,22 @@
+{% extends 'booking/layout.html' %}
+
+{% block body %}
+
+<main class="container login main-pad">
+    {% if messages %}
+        {% for message in messages %}
+        <div class="message">{{message}}</div>
+        {% endfor %}
+    {% endif %}
+    <h1>Login</h1>
+    <form class="login-form" action="" method="post">   
+        {% csrf_token %}     
+        <input autofocus class="form__field main-margin" type="text" name="username" placeholder="Username">
+        <input class="form__field main-margin" type="password" name="password" placeholder="Password">
+        <input type="hidden" name="next" value="{{request.GET.next}}"/>
+        <input class="btn" type="submit" value="Login">
+    </form>
+
+    Don't have an account yet? <a href="{% url 'register' %}">Register here.</a>
+</main>
+{% endblock %}

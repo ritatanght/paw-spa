@@ -1,0 +1,70 @@
+{% extends 'booking/layout.html' %}
+{% load static %}
+
+{% block body %}
+<main class="booking container main-pad">
+    
+    <h2>Book Your Appointment</h2>
+    <p>Select your pet for the appointment from the list, or Add the pet first <button class="add-pet">Add a Pet</button></p>
+    {% if petform.errors %}
+    <form class="pet-form show-form" action="{% url 'booking' %}" method="post">
+    {% else %}
+    <form class="pet-form" action="{% url 'booking' %}" method="post">
+    {% endif %}
+        {%csrf_token%}
+        {{petform}}
+        <input class="btn" name="add_pet" type="submit" value="Add Pet"/>
+        <hr>
+    </form>
+
+    {% if messages %}
+        {% for message in messages %}
+        <div class="message main-margin">{{message}}</div>
+        {% endfor %}
+    {% endif %}
+
+    <section class="preview main-margin">
+        <p class="preview__heading center flex"><i class="fa-solid fa-arrow-left week-prev preview-disabled"></i>Upcoming's Avaliable Slot Preview <i class="fa-solid fa-arrow-right week-next"></i></p>
+        <div class="preview__date-list">
+        {%for date, time in date_list.items %}
+        <div class="date__col center">
+            <p class="date__text" id="{{date|date:'Y-m-d'}}">{{date|date:"d M (D)"}}</p>
+            <div class="time">
+            {% if time == 'Closed' %}
+                <p class="closed">Closed</p>
+            {% else %}
+                {% for slot in time %}
+                {% if slot == 10 %}
+                    <p class="free" id="{{date|date:'Y-m-d'}}_{{slot}}">10:00 AM</p>
+                {% elif slot == 13%}
+                    <p class="free" id="{{date|date:'Y-m-d'}}_{{slot}}">1:00 PM</p>
+                {% elif slot == 15%}
+                    <p class="free" id="{{date|date:'Y-m-d'}}_{{slot}}">3:00 PM</p>
+                {% elif slot == 'x'%}
+                    <p class="na">Not Avaliable</p>
+                {% endif %}
+                {% endfor %}
+            {% endif %}            
+            </div> 
+        </div>
+        {% endfor %}
+          </div> 
+    </section>
+    <form class="book-form" action="{% url 'booking' %}" method="post">
+        {%csrf_token%}
+        {{form}}     
+        <input class="btn" name="book" type="submit" value="Submit">
+    </form>
+
+    
+</main>
+<script>
+ 
+
+</script>
+{% endblock %}
+
+
+{% block script %}
+    <script type="module" src="{% static 'booking/booking.js' %}" defer></script>
+{% endblock %}
