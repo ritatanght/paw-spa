@@ -1,8 +1,19 @@
 # PAW SPA
-
 This web application is created as the capstone project for CS50W. It is a booking application for dog owners to book pet grooming services for their dogs. I got the inspiration for the project due to my experience of having to call the store to book such an appointment every time. Although I am aware that this is not a brand-new idea, I believe, in this technologically advanced era, customers should be provided with an online system where they can easily book an appointment and choose the services they want.
 
-<img src="./booking/static/booking/paw-spa-screenshot.png" alt="screenshot" width="600">
+## Screenshots
+
+Homepage
+
+<img src="./booking/static/booking/paw-spa_home.png" alt="screenshot" width="600">
+
+Profile page
+
+<img src="./booking/static/booking/paw-spa_profile.png" alt="screenshot" width="600">
+
+Booking page
+
+<img src="./booking/static/booking/paw-spa_booking.png" alt="screenshot" width="600">
 
 ## Table of contents
 
